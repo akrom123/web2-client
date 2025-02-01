@@ -19,14 +19,15 @@ export const WelcomeStep = ({ nextStep }: WelcomeStepProps) => {
   console.log("💩💩💩 after useAuth");
 
   const handleNextClick = async () => {
-    if (tonConnectUI.connected) {
-      await auth.mutateAsync();
-      nextStep();
-    } else {
-      await tonConnectUI.openModal();
-      await auth.mutateAsync();
-    }
+    await tonConnectUI.openModal();
+    await auth.mutateAsync();
   };
+
+  useEffect(() => {
+    if (tonConnectUI.connected) {
+      auth.mutateAsync().then(() => nextStep());
+    }
+  }, [tonConnectUI.connected]);
 
   // useEffect(() => {
   //   const first = setTimeout(async () => {
